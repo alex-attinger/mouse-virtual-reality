@@ -45,7 +45,6 @@ def main():
               0,1,0)
     
     t0=time.time()
-    #glutMainLoop()
     run()
 
     return
