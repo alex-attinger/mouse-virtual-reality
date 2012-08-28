@@ -1,6 +1,6 @@
 from PyQt4 import QtCore
 import socket
-
+import sys
 
 class MouseReader(QtCore.QThread):
     
@@ -20,19 +20,19 @@ class MouseReader(QtCore.QThread):
 
     def run(self):
 
-	while True:
-            status, dx, dy = tuple(ord(c) for c in self.mouse.read(3)) 
-        
-            dx = self.to_signed(dx)  
-            dy = self.to_signed(dy)
-            dy = self.y_mov_filter(self.dy_old,dy)
-            dx = self.x_mov_filter(self.dy_old,dx)
-            self.dx_old=dx
-            self.dy_old=dy
-            self.xPos = self.xPos + dx
-            self.yPos = self.yPos + dy
-            if self.recorder:
-                self.rec.write(str(dx)+' '+ str(dy)+'\n')
+        while True:
+                status, dx, dy = tuple(ord(c) for c in self.mouse.read(3)) 
+            
+                dx = self.to_signed(dx)  
+                dy = self.to_signed(dy)
+                dy = self.y_mov_filter(self.dy_old,dy)
+                dx = self.x_mov_filter(self.dy_old,dx)
+                self.dx_old=dx
+                self.dy_old=dy
+                self.xPos = self.xPos + dx
+                self.yPos = self.yPos + dy
+                if self.recorder:
+                    self.rec.write(str(dx)+' '+ str(dy)+'\n')
  
     def to_signed(self,n):  
             return n - ((0x80 & n) << 1) 
