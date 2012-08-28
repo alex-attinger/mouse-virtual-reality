@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project VR -->
-<!-- Saved: 2012-08-22, 15:55:19 -->
+<!-- Saved: 2012-08-28, 13:34:06 -->
 <!-- Copyright (C) 2012 Alex Attinger,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -22,6 +22,8 @@
     <Source>drum/stripes.py</Source>
     <Source>world/vrscreen.py</Source>
     <Source>world/pygame_context.py</Source>
+    <Source>mouse/mouse_controller.py</Source>
+    <Source>mouse/mousereader.py</Source>
   </Sources>
   <Forms>
   </Forms>
