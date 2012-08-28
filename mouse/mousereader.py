@@ -1,10 +1,10 @@
 from PyQt4 import QtCore
-
+import socket
 
 class MouseReader(QtCore.QThread):
     
 
-    def __init__(self):
+    def __init__(self, udp = False ip='127.0.0.1', port=12012):
 	QtCore.QThread.__init__(self)
 	self.window_low = -10
 	self.window_high = 10
@@ -13,6 +13,8 @@ class MouseReader(QtCore.QThread):
 	self.mouse = file('/dev/input/mouse0')
 	self.xPos = 0
 	self.yPos = 0
+    if udp:
+        
 
     def run(self):
 
