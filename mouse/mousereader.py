@@ -4,8 +4,22 @@ import sys
 
 class MouseReader(QtCore.QThread):
     
+    '''
+    This class reads bytes from /dev/input/mouse0
+    works only on linux and needs superuser privileges to access dev/input/mouse0
+    usage: MyObj = MouseReader()
+    MyObj.start()
+    MyObj.get... to get data
+    
+    '''
+    
 
-    def __init__(self, recorder = False):
+    def __init__(self, recorder = False, dev='/dev/input/mouse0'):
+        
+        if not sys.platform.startswith('linux'):
+            print 'I only work on linux'
+            
+        
         QtCore.QThread.__init__(self)
         self.window_low = -10
         self.window_high = 10
@@ -15,12 +29,13 @@ class MouseReader(QtCore.QThread):
         self.xPos = 0
         self.yPos = 0
         self.recorder = recorder
+        self.is_running = True
         if self.recorder:
             self.init_recorder()
 
     def run(self):
 
-        while True:
+        while self.is_running:
                 status, dx, dy = tuple(ord(c) for c in self.mouse.read(3)) 
             
                 dx = self.to_signed(dx)  
@@ -33,8 +48,14 @@ class MouseReader(QtCore.QThread):
                 self.yPos = self.yPos + dy
                 if self.recorder:
                     self.rec.write(str(dx)+' '+ str(dy)+'\n')
+                    
+    def stop(self):
+        self.is_running = False
  
-    def to_signed(self,n):  
+    def to_signed(self,n):
+            '''
+            convert unsigned int to signed int
+            '''
             return n - ((0x80 & n) << 1) 
 
     def y_mov_filter(self,old,new):
@@ -50,14 +71,21 @@ class MouseReader(QtCore.QThread):
             return new
     
     def getPos(self):
-            return (self.xPos,self.yPos)
+        '''
+        get current x and y coordinates in the mousereader coordinate system
+        '''
+        return (self.xPos,self.yPos)
 
     def getLastDeltas(self):
-            return (self.dx_old,self.dy_old)
+        '''
+        get the last observed dx, dy values of the mouse, note that
+        the values are not changed (i.e. set to 0) when the mouse is not moving
+        '''
+        return (self.dx_old,self.dy_old)
     
     def init_recorder(self):
-            self.rec = open('mousedata.txt', 'w')
-            return
+        self.rec = open('mousedata.txt', 'w')
+        return
 
     
   

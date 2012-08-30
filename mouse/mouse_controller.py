@@ -12,16 +12,25 @@ website: zetcode.com
 last edited: September 2011
 """
 
-import sys,time
+import sys,time, socket
 from PyQt4 import QtGui, QtCore
 from mousereader import MouseReader
 
 class MouseController(QtGui.QWidget):
+    '''
+    A qWidget to visualize mouse input.
+    If udp is enabled, udp packages are sent to the specified address and port in interval ms
+    Message format: init_time (time of instantiation) time passed since init_time (xPos,yPos)
     
-    def __init__(self, udp=False, ip='127.0.0.1', port=12012):
+    '''
+    
+    def __init__(self, udp=False, ip='127.0.0.1', port=12012, interval = 100):
         self.init_time = time.time()
         super(MouseController, self).__init__()
-        
+        self.udp = udp
+        self.ip = ip
+        self.port = port
+        self.interval = interval
         self.red = QtGui.QColor(255, 0, 0)
         self.blue = QtGui.QColor(0,0,255)
         self.black = QtGui.QColor(0,0,0)
@@ -33,7 +42,7 @@ class MouseController(QtGui.QWidget):
         self.yPos = 0
         self.xPos = 0
         #the mouse reader
-        self.mr= MouseReader()
+        self.mr= MouseReader(dev='/dev/input/mouse0')
         self.mr.start()
         
         #the timer
@@ -46,7 +55,7 @@ class MouseController(QtGui.QWidget):
                 socket.SOCK_DGRAM ) # UDP
             timer1 = QtCore.QTimer(self)
             timer1.timeout.connect(self.sendData)
-            timer.start(100)
+            timer1.start(self.interval)
 
         
     def initUI(self):      
@@ -110,7 +119,7 @@ class MouseController(QtGui.QWidget):
     def sendData(self):
         delta_time = time.time() - self.init_time
         msg=str(self.init_time)+'\t' + '%3.2f\t'%(delta_time)+str(self.mr.getPos())
-        sendMsg(msg)
+        self.sendMsg(msg)
 
     def sendMsg(self, msg):
         self.sock.sendto(msg, (self.ip, self.port))
@@ -130,7 +139,7 @@ class Receiver():
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
-    ex = MouseController()
+    ex = MouseController(udp=True)
     sys.exit(app.exec_())
 
 
