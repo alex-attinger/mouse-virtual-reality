@@ -7,12 +7,13 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
 from math import sin, cos, pi 
-from world.camera import Camera, Point
+from VR.world.camera import Camera, Point
+from VR.world.pygame_context import MyContext
 
 import pygame
 
 
-class MyClass(object):
+class MyClass(MyContext):
     '''
     classdocs
     '''
@@ -23,34 +24,18 @@ class MyClass(object):
         Constructor
         '''
         
-
-#        glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
-#        glutInitWindowSize(512,512)
-#        glutInitWindowPosition(310,30)
-#        glutCreateWindow('world')
-        self.create_screen()
-    
-        #self.setupParams()
+        MyContext.__init__(self)
+        self.setupParams()
         
-        #glutDisplayFunc(self.display)
-        #glutIdleFunc(move)
-        #glutKeyboardFunc(self.keyboard)
-        #glutSpecialFunc(self.special_keyboard)
-        #the camera that whill watch the textures:
+  
         self.homeCam=Camera(Point(0,0,10),Point(0,0,0),Point(0,1,0))
         
-        #glutMainLoop()
 
         return
         
     def create_screen(self):
-        '''
-        Create pygame screen using SCREEN_RESOLUTION and FULLSCREEN parameters
-        '''
         flags = pygame.DOUBLEBUF | pygame.HWSURFACE | pygame.OPENGL
-      
         self.screen = pygame.display.set_mode((512, 512), flags)
-        self.clock = pygame.time.Clock()
     
     def setupParams(self):
         glEnable(GL_DEPTH_TEST)
@@ -70,7 +55,7 @@ class MyClass(object):
         glPixelStorei(GL_UNPACK_ALIGNMENT,1)
         return
     
-    def display(self):
+    def render(self):
         glLoadIdentity()
         #holding pixel data
         texture=[]
@@ -92,13 +77,6 @@ class MyClass(object):
         glDrawBuffer(GL_BACK);
         glClearColor(0.0,0.0,0.0,0.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-       
-
-        
-        
-        
-        
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
         
        
@@ -200,17 +178,10 @@ class MyClass(object):
         glEnd()
         glDisable(GL_TEXTURE_2D)
         glEnable(GL_DEPTH_TEST)
-        
-        #glutSwapBuffers()
-        pygame.display-flip()
+
         glDeleteTextures(textureid)
-        
         return
     
-    def run(self):
-        while True:
-            self.display()
-        return
     
     def special_keyboard(self,key,x,y):
         
@@ -243,11 +214,9 @@ class MyClass(object):
     
         return
     
-
-        
-    
     
 if __name__=='__main__':
     
     app=MyClass()
     app.run()
+    sys.exit()

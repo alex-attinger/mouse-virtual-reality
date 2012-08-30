@@ -29,7 +29,7 @@ class MyContext():
         '''
         flags = pygame.DOUBLEBUF | pygame.HWSURFACE | pygame.OPENGL
       
-        self.screen = pygame.display.set_mode((800, 800), flags)
+        self.screen = pygame.display.set_mode((512, 512), flags)
         self.clock = pygame.time.Clock()
         
     def run(self):
