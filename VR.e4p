@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project VR -->
-<!-- Saved: 2012-08-30, 10:36:01 -->
+<!-- Saved: 2012-09-04, 15:15:04 -->
 <!-- Copyright (C) 2012 Alex Attinger,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -25,6 +25,10 @@
     <Source>mouse/mouse_controller.py</Source>
     <Source>mouse/mousereader.py</Source>
     <Source>world/orig_gl.py</Source>
+    <Source>camera/cam2.py</Source>
+    <Source>camera/cam.py</Source>
+    <Source>camera/cam_play.py</Source>
+    <Source>camera/camgst.py</Source>
   </Sources>
   <Forms>
   </Forms>
