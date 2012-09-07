@@ -1,3 +1,4 @@
+#displaying and recording from webcam
 import gobject, pygst
 pygst.require('0.10')
 import gst
@@ -12,7 +13,7 @@ class Video(QMainWindow):
     
     def __init__(self):
         if len(sys.argv) == 1:
-            print ("Using Default device video0 and file prefix test")
+            print ("Using file prefix test and default device video0.")
             self.filename_prefix = 'test'
             self.device = '0'
         elif len(sys.argv) == 2:
@@ -50,6 +51,7 @@ class Video(QMainWindow):
         self.recorder = gst.Pipeline("recorder")
         source = gst.element_factory_make("v4l2src", "vsource")
         source.set_property("device", "/dev/video%s"%(self.device))
+        #source.set_property("device", "/dev/video1")
         
         sink = gst.element_factory_make("xvimagesink", "sink")
         sink.set_property("sync", 'False')
@@ -98,7 +100,7 @@ class Video(QMainWindow):
         # set up the recorder
         self.player = gst.Pipeline("player")
         source = gst.element_factory_make("v4l2src", "vsource")
-        source.set_property("device", "/dev/video1")
+        source.set_property("device", "/dev/video%s"%(self.device))
         
         sink = gst.element_factory_make("xvimagesink", "sink")
         #sink.set_property("sync", 'False')
